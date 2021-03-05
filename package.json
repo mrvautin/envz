@@ -1,0 +1,51 @@
+{
+  "name": "envz",
+  "description": "A dead simple module for storing and managing your environment variables in a simple and easy to read yaml file.",
+  "version": "1.0.0",
+  "main": "lib/envz.js",
+  "scripts": {
+    "test": "ava",
+    "lint": "eslint ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mrvautin/envz.git"
+  },
+  "keywords": [
+    "dotenv",
+    "env",
+    ".env",
+    "environment",
+    "variables",
+    "config",
+    "settings"
+  ],
+  "readmeFilename": "README.md",
+  "ava": {
+    "serial": true,
+    "files": [
+      "./test/*.js"
+    ],
+    "timeout": "30s",
+    "verbose": true
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "author": "mrvautin",
+  "license": "MIT",
+  "dependencies": {
+    "deepmerge": "^4.2.2",
+    "js-yaml": "^4.0.0"
+  },
+  "devDependencies": {
+    "ava": "^3.15.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-extra-rules": "0.0.0-development",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1"
+  }
+}
