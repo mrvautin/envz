@@ -12,15 +12,15 @@ yarn add envz
 
 ## Usage
 
-You should use `envz` as early on in the entry point of your app as possible. Eg: app.js or index.js file which loads your app. 
+You should use `envz` as early on in the entry point of your app as possible. Eg: `app.js` or `index.js` file which loads your app. 
 
-Rather than override `process.env` object, `envz` will return a new object to use throughout your app. 
+Rather than override `process.env.x` object, `envz` will return a new object to use throughout your app. 
 
 ```javascript
 const envz = require('envz');
 ```
 
-Create a `env.yaml` or any other named file and load the file
+Create a `env.yaml` or any other named file and load it:
 
 ```javascript
 const env = envz('env.yaml');
@@ -30,7 +30,7 @@ const env = envz('env.yaml');
 
 The idea is that the `process.env` will be merged with loaded `yaml` file. 
 
-`env` uses a cascading (sequential order) configuration method which sometimes is better understood looking at an example.
+`env` uses a cascading (sequential order) configuration method which is easier to understand looking at an example.
 
 ``` yaml
 base:
@@ -78,13 +78,13 @@ The idea behind `base` (or whatever you want to call it) is that you don't need 
 
 ## Options
 
-You can set an environment manually rather than using `NODE_ENV` by adding an `evironment` object. Eg:
+You can set the environment manually rather than using `NODE_ENV` by adding an `environment` object. Eg:
 
 ``` javascript
 const env = envz('env.yaml', { environment: 'production' });
 ```
 
-By default the `process.env` values override what is set in the yaml file. You can override this so that the yaml file is king by adding the following flag:
+By default the values set in `process.env` overrides what is set in your yaml file. You can change this so that the yaml file is king by adding the following flag:
 
 ``` javascript
 const env = envz('env.yaml', { yamlFileOverride: true });
