@@ -1,4 +1,6 @@
 const { envz, save } = require('../lib/envz');
+const fs = require('fs');
+let defaultYaml = '';
 
 const {
     serial: test
@@ -181,7 +183,7 @@ test('Update env object and save', async t => {
         }
     };
     const saveObj = await save({
-        envfile: 'test.yaml',
+        envfile: 'env.yaml',
         data: updateObj
     });
 
@@ -214,12 +216,12 @@ test('Update env object and save, re-read yaml file & check updated', async t =>
 
     // Save config file
     const saveObj = await save({
-        envfile: 'test.yaml',
+        envfile: 'env.yaml',
         data: updateObj
     });
 
     // Read back config file
-    const env = envz('test.yaml', { environment: 'production' });
+    const env = envz('env.yaml', { environment: 'production' });
 
     // Check port is updated
     t.is(saveObj.error, '');
@@ -231,9 +233,17 @@ test('Update env object and save, re-read yaml file & check updated', async t =>
 test.afterEach(() => {
     delete process.env.PORT;
     delete process.env.config;
+
+    // Revert the test file to original
+    fs.writeFileSync('env.yaml', defaultYaml);
 });
 
 // Removing ENV and Ava adds TEST
 test.beforeEach(() => {
     delete process.env.NODE_ENV;
+});
+
+// Before all, read the env file
+test.before(() => {
+    defaultYaml = fs.readFileSync('env.yaml', 'utf-8');
 });
