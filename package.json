@@ -1,7 +1,7 @@
 {
   "name": "envz",
   "description": "A dead simple module for storing and managing your environment variables in a simple and easy to read yaml file.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/envz.js",
   "scripts": {
     "test": "ava",
@@ -18,7 +18,12 @@
     "environment",
     "variables",
     "config",
-    "settings"
+    "settings",
+    "save",
+    "update",
+    "settings",
+    "configuration",
+    "persist"
   ],
   "readmeFilename": "README.md",
   "ava": {
@@ -32,7 +37,7 @@
   "engines": {
     "node": ">=8"
   },
-  "author": "mrvautin",
+  "author": "@mrvautin",
   "license": "MIT",
   "dependencies": {
     "deepmerge": "^4.2.2",
