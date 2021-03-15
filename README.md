@@ -17,7 +17,7 @@ You should use `envz` as early on in the entry point of your app as possible. Eg
 Rather than override `process.env.x` object, `envz` will return a new object to use throughout your app. 
 
 ```javascript
-const envz = require('envz');
+const { envz } = require('envz');
 ```
 
 Create a `env.yaml` or any other named file and load it:
@@ -88,4 +88,42 @@ By default the values set in `process.env` overrides what is set in your yaml fi
 
 ``` javascript
 const env = envz('env.yaml', { yamlFileOverride: true });
+```
+
+## Save / Update config
+
+Sometimes you may want to store changes back to your `envz` config. You can easily do this by importing `save`:
+
+``` javascript
+const { save } = require('envz');
+```
+
+The `save` method takes an object with two values:
+
+- `envfile`: The yaml file you are wanting to update
+- `data`: The object you want to update back to the file. See tests and example below.
+
+``` javascript
+// In this case we will be adding to the `base` config but you can easily
+// replace `base` with `production` or whatever environment.
+const saveObj = await save({
+    envfile: 'test.yaml',
+    data: {
+      base: {
+        config: {
+            default: 'default-key'
+        }
+      }
+    }
+});
+```
+
+This will result in the `test.yaml` being updated:
+
+``` yaml
+base:
+  PORT: 1234
+  config:
+    default: default-key
+...
 ```

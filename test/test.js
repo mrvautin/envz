@@ -1,12 +1,16 @@
-const envz = require('../lib/envz');
+const { envz, save } = require('../lib/envz');
 
 const {
     serial: test
 } = require('ava');
 
+test('When file doesnt exist', async t => {
+    await t.throwsAsync(async () => {
+        envz('file-doesnt-exist.yaml');
+    }, { instanceOf: Error, message: 'Env yaml file does not exist' });
+});
+
 test('Without NODE_ENV set, defaults to "development"', async t => {
-    // Need to delete is as Ava defaults to 'test'
-    delete process.env.NODE_ENV;
     const env = envz('env.yaml');
 
     t.is(env.env, 'development');
@@ -166,4 +170,70 @@ test('"yamlFileOverride" false makes .yaml files override environment variables'
     const env = envz('env.yaml', { yamlFileOverride: false });
 
     t.is(env.PORT, '9999999');
+});
+
+test('Update env object and save', async t => {
+    const updateObj = {
+        base: {
+            config: {
+                default: 'fdfdfdfd'
+            }
+        }
+    };
+    const saveObj = await save({
+        envfile: 'test.yaml',
+        data: updateObj
+    });
+
+    t.is(saveObj.error, '');
+    t.is(saveObj.data.base.config.default, updateObj.base.config.default);
+});
+
+test('Try save a file which doesnt exist', async t => {
+    await t.throwsAsync(async () => {
+        await save({
+            envfile: 'file-doesnt-exist.yaml',
+            data: {}
+        });
+    }, { instanceOf: Error, message: 'Env yaml file does not exist' });
+});
+
+test('Update env object and save, re-read yaml file & check updated', async t => {
+    // Set port back null
+    delete process.env.PORT;
+
+    // Update PORT object
+    const updateObj = {
+        production: {
+            PORT: 8080,
+            config: {
+                key: 'test-token'
+            }
+        }
+    };
+
+    // Save config file
+    const saveObj = await save({
+        envfile: 'test.yaml',
+        data: updateObj
+    });
+
+    // Read back config file
+    const env = envz('test.yaml', { environment: 'production' });
+
+    // Check port is updated
+    t.is(saveObj.error, '');
+    t.is(saveObj.data.production.PORT, env.PORT);
+    t.is(saveObj.data.production.config.key, env.config.key);
+});
+
+// This will always run, regardless of earlier failures
+test.afterEach(() => {
+    delete process.env.PORT;
+    delete process.env.config;
+});
+
+// Removing ENV and Ava adds TEST
+test.beforeEach(() => {
+    delete process.env.NODE_ENV;
 });
